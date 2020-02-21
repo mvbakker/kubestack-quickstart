@@ -24,7 +24,7 @@ jobs:
     - name: Authenticate to GCP
       uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
       with:
-        version: ${{ env.TERRAFORM_VERSION }}
+        version: ${{ env.GOOGLE_CLOUD_SDK_VERSION }}
         service_account_email: ${{ secrets.SA_EMAIL }}
         service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS}}
 
