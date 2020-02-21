@@ -21,10 +21,10 @@ jobs:
     # GCP steps
     - name: Authenticate to GCP
       uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
-        with:
-          version: '275.0.0'
-          service_account_email: ${{ secrets.SA_EMAIL }}
-          service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS}}
+      with:
+        version: '275.0.0'
+        service_account_email: ${{ secrets.SA_EMAIL }}
+        service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS}}
 
     # Terraform steps
     - name: Initialize Terraform
