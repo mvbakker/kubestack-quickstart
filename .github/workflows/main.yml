@@ -49,6 +49,7 @@ jobs:
         tf_actions_comment: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
     
     - name: 'Terraform Plan'
       id: 'terraform_plan'
@@ -60,6 +61,7 @@ jobs:
         tf_actions_comment: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
     
 #     - name: 'Terraform Apply'
 #       uses: hashicorp/terraform-github-actions@master
@@ -68,3 +70,4 @@ jobs:
 #         tf_actions_subcommand: 'apply'
 #       env:
 #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
