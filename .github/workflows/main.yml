@@ -47,12 +47,22 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }} 
     
+    - name: Check plugin
+      run: |
+        pwd 
+        ls terraform.d/plugins/linux_amd64
+
     - name: Install Terraform-Provider-Kustomize
       run: |
         mkdir -p terraform.d/plugins/linux_amd64
         curl -L https://github.com/kbst/terraform-provider-kustomize/releases/download/v0.1.0-beta.0/terraform-provider-kustomization-v0.1.0-beta.0-linux-amd64 -o "terraform.d/plugins/linux_amd64/terraform-provider-kustomization"
         chmod +x terraform.d/plugins/linux_amd64/terraform-provider-kustomization
-        
+
+    - name: Check plugin
+      run: |
+        pwd 
+        ls terraform.d/plugins/linux_amd64
+    
     # - name: 'Terraform Validate'
     #   uses: hashicorp/terraform-github-actions@master
     #   with:
