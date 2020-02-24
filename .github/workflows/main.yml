@@ -23,9 +23,9 @@ jobs:
 
     - name: Install Terraform-Provider-Kustomize
       run: |
-        mkdir -p ${HOME}/.terraform.d/plugins
-        curl -L https://github.com/kbst/terraform-provider-kustomize/releases/download/v0.1.0-beta.0/terraform-provider-kustomization-v0.1.0-beta.0-linux-amd64 -o "${HOME}/.terraform.d/plugins/terraform-provider-kustomization"
-        chmod +x ${HOME}/.terraform.d/plugins/terraform-provider-kustomization
+        mkdir -p terraform.d/plugins/linux_amd64
+        curl -L https://github.com/kbst/terraform-provider-kustomize/releases/download/v0.1.0-beta.0/terraform-provider-kustomization-v0.1.0-beta.0-linux-amd64 -o "terraform.d/plugins/linux_amd64/terraform-provider-kustomization"
+        chmod +x terraform.d/plugins/linux_amd64/terraform-provider-kustomization
 
     # GCP steps
     - name: Authenticate to GCP
