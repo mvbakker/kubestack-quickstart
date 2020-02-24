@@ -57,7 +57,7 @@ jobs:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
 
     - name: Create Ops workspace
-      run: terraform workspace new ops
+      run: terraform workspace select ops
       env:
         GOOGLE_APPLICATION_CREDENTIALS: gcp-sa-key.json
 
@@ -65,7 +65,8 @@ jobs:
       run: terraform plan -out=tfplan -input=false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        # GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        GOOGLE_APPLICATION_CREDENTIALS: gcp-sa-key.json
 
     - name: Show plan
       run: cat tfplan
