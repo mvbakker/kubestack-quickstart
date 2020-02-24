@@ -13,6 +13,8 @@ env:
   TERRAFORM_PROVIDER_KUSTOMIZE_VERSION: v0.1.0-beta.0
   GOOGLE_CLOUD_SDK_VERSION: 272.0.0
 
+TERRAFORM_PROVIDER_KUSTOMIZE_VERSION
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -23,8 +25,8 @@ jobs:
 
     - name: Install Terraform-Provider-Kustomize
       run: |
-        curl -LO https://github.com/kbst/terraform-provider-kustomize/releases/download/${{ TERRAFORM_PROVIDER_KUSTOMIZE_VERSION }}/terraform-provider-kustomization-${{ TERRAFORM_PROVIDER_KUSTOMIZE_VERSION }}-linux-amd64 \
-        && mv terraform-provider-kustomization-${{ TERRAFORM_PROVIDER_KUSTOMIZE_VERSION }}-linux-amd64 /opt/bin/terraform-provider-kustomization \
+        curl -LO https://github.com/kbst/terraform-provider-kustomize/releases/download/$TERRAFORM_PROVIDER_KUSTOMIZE_VERSION/terraform-provider-kustomization-$TERRAFORM_PROVIDER_KUSTOMIZE_VERSION-linux-amd64 \
+        && mv terraform-provider-kustomization-$TERRAFORM_PROVIDER_KUSTOMIZE_VERSION-linux-amd64 /opt/bin/terraform-provider-kustomization \
         && chmod +x /opt/bin/terraform-provider-kustomization
 
     # GCP steps
