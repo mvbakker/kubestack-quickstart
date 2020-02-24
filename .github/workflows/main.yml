@@ -30,11 +30,11 @@ jobs:
         chmod +x $GITHUB_WORKSPACE/terraform.d/plugins/linux_amd64/terraform-provider-kustomization
 
     - name: 'Install Terraform'
-        run: |
-          mkdir -p ${HOME}/bin
-          export PATH="${HOME}/bin:${PATH}"
-          curl -L -o /tmp/terraform.zip https://releases.hashicorp.com/terraform/0.12.20/terraform_0.12.20_linux_amd64.zip
-          unzip -o -d ${HOME}/bin /tmp/terraform.zip
+      run: |
+        mkdir -p ${HOME}/bin
+        export PATH="${HOME}/bin:${PATH}"
+        curl -L -o /tmp/terraform.zip https://releases.hashicorp.com/terraform/0.12.20/terraform_0.12.20_linux_amd64.zip
+        unzip -o -d ${HOME}/bin /tmp/terraform.zip
 
     # GCP steps
     - name: Authenticate to GCP
@@ -57,9 +57,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
 
-     - name: Show plan
-      run: |
-        cat tfplan
+    - name: Show plan
+      run: cat tfplan
     
     # - name: 'Terraform Init'
     #   uses: hashicorp/terraform-github-actions@master
