@@ -58,6 +58,8 @@ jobs:
 
     - name: Create Ops workspace
       run: terraform workspace new ops
+      env:
+        GOOGLE_CLOUD_KEYFILE_JSON: gcp-sa-key.json
 
     - name: Create a Terraform plan
       run: terraform plan -out=tfplan -input=false
