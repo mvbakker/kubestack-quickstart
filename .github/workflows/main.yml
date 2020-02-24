@@ -23,9 +23,9 @@ jobs:
 
     - name: Install Terraform-Provider-Kustomize
       run: |
-      curl -LO https://github.com/kbst/terraform-provider-kustomize/releases/download/${{ TERRAFORM_PROVIDER_KUSTOMIZE_VERSION }}/terraform-provider-kustomization-${{ TERRAFORM_PROVIDER_KUSTOMIZE_VERSION }}-linux-amd64 \
-      && mv terraform-provider-kustomization-${{ TERRAFORM_PROVIDER_KUSTOMIZE_VERSION }}-linux-amd64 /opt/bin/terraform-provider-kustomization \
-      && chmod +x /opt/bin/terraform-provider-kustomization
+        curl -LO https://github.com/kbst/terraform-provider-kustomize/releases/download/${{ TERRAFORM_PROVIDER_KUSTOMIZE_VERSION }}/terraform-provider-kustomization-${{ TERRAFORM_PROVIDER_KUSTOMIZE_VERSION }}-linux-amd64 \
+        && mv terraform-provider-kustomization-${{ TERRAFORM_PROVIDER_KUSTOMIZE_VERSION }}-linux-amd64 /opt/bin/terraform-provider-kustomization \
+        && chmod +x /opt/bin/terraform-provider-kustomization
 
     # GCP steps
     - name: Authenticate to GCP
