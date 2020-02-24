@@ -44,6 +44,11 @@ jobs:
         service_account_email: ${{ secrets.SA_EMAIL }}
         service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}
 
+    - name: Create key.json so Terraform can authenticate to GCP
+      run: gcloud iam service-accounts keys create gcp-sa-key.json --iam-account ${{ secrets.SA_EMAIL }}
+
+    - run: cat gcp-sa-key.json
+
     # Terraform steps
     - name: Initialize Terraform
       run: terraform init -input=false
