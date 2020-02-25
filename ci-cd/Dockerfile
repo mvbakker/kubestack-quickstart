@@ -53,25 +53,25 @@ RUN echo "TERRAFORM_PROVIDER_KUSTOMIZE_VERSION: ${TERRAFORM_PROVIDER_KUSTOMIZE_V
 COPY nss-wrapper /opt/bin/nss-wrapper
 
 
-#
-#
-# AWS builder
-FROM builder AS aws
+# #
+# #
+# # AWS builder
+# FROM builder AS aws
 
-ARG AWS_IAM_AUTHENTICATOR_VERSION=0.5.0
+# ARG AWS_IAM_AUTHENTICATOR_VERSION=0.5.0
 
-RUN mkdir -p /opt/aws/bin
+# RUN mkdir -p /opt/aws/bin
 
-RUN echo "AWS_IAM_AUTHENTICATOR_VERSION: ${AWS_IAM_AUTHENTICATOR_VERSION}" \
-    && curl -Lo /opt/aws/bin/aws-iam-authenticator https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v${AWS_IAM_AUTHENTICATOR_VERSION}/aws-iam-authenticator_${AWS_IAM_AUTHENTICATOR_VERSION}_linux_amd64 \
-    && chmod +x /opt/aws/bin/aws-iam-authenticator \
-    && /opt/aws/bin/aws-iam-authenticator
+# RUN echo "AWS_IAM_AUTHENTICATOR_VERSION: ${AWS_IAM_AUTHENTICATOR_VERSION}" \
+#     && curl -Lo /opt/aws/bin/aws-iam-authenticator https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v${AWS_IAM_AUTHENTICATOR_VERSION}/aws-iam-authenticator_${AWS_IAM_AUTHENTICATOR_VERSION}_linux_amd64 \
+#     && chmod +x /opt/aws/bin/aws-iam-authenticator \
+#     && /opt/aws/bin/aws-iam-authenticator
 
-RUN echo "AWS_CLI_VERSION: N/A" \
-    && curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip" \
-    && unzip awscli-bundle.zip \
-    && ./awscli-bundle/install -i /opt/aws \
-    && /opt/aws/bin/aws --version
+# RUN echo "AWS_CLI_VERSION: N/A" \
+#     && curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip" \
+#     && unzip awscli-bundle.zip \
+#     && ./awscli-bundle/install -i /opt/aws \
+#     && /opt/aws/bin/aws --version
 
 
 #
@@ -88,24 +88,24 @@ RUN echo "GOOGLE_CLOUD_SDK_VERSION: ${GOOGLE_CLOUD_SDK_VERSION}" \
     && /opt/google/bin/gcloud --version
 
 
-#
-#
-# Azure builder
-FROM builder AS azure
+# #
+# #
+# # Azure builder
+# FROM builder AS azure
 
-ARG AZURE_CLI_VERSION=2.0.81
+# ARG AZURE_CLI_VERSION=2.0.81
 
-RUN apt-get update && apt-get install -y \
-    libffi-dev
+# RUN apt-get update && apt-get install -y \
+#     libffi-dev
 
-RUN echo "AZURE_CLI_VERSION: ${AZURE_CLI_VERSION}" \
-    && python -m venv /opt/azure/ \
-    && /opt/azure/bin/pip install --no-cache-dir \
-        azure-cli==${AZURE_CLI_VERSION} \
-    && echo '#!/usr/bin/env bash\n/opt/azure/bin/python -m azure.cli "$@"' \
-        > /opt/bin/az \
-    && chmod +x /opt/bin/az \
-    && /opt/bin/az --version
+# RUN echo "AZURE_CLI_VERSION: ${AZURE_CLI_VERSION}" \
+#     && python -m venv /opt/azure/ \
+#     && /opt/azure/bin/pip install --no-cache-dir \
+#         azure-cli==${AZURE_CLI_VERSION} \
+#     && echo '#!/usr/bin/env bash\n/opt/azure/bin/python -m azure.cli "$@"' \
+#         > /opt/bin/az \
+#     && chmod +x /opt/bin/az \
+#     && /opt/bin/az --version
 
 
 #
@@ -130,17 +130,17 @@ ENV HOME=/infra/.user
 COPY --from=common /opt/bin /opt/bin
 ENV PATH=/opt/bin:$PATH
 
-# AWS
-COPY --from=aws /opt/aws /opt/aws
-ENV PATH=$PATH:/opt/aws/bin
+# # AWS
+# COPY --from=aws /opt/aws /opt/aws
+# ENV PATH=$PATH:/opt/aws/bin
 
 # Google
 COPY --from=google /opt/google /opt/google
 ENV PATH=$PATH:/opt/google/bin
 
-# Azure
-COPY --from=azure /opt/azure /opt/azure
-ENV PATH=$PATH:/opt/azure/bin
+# # Azure
+# COPY --from=azure /opt/azure /opt/azure
+# ENV PATH=$PATH:/opt/azure/bin
 
 WORKDIR /infra
 
