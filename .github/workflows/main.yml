@@ -27,7 +27,7 @@ jobs:
     # Setup Gcloud credentials
     - name: Setup Gcloud credentials
       env:
-        GCLOUD_AUTH: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        GCLOUD_AUTH: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}
       run: |
             mkdir -p .user/.config/gcloud
             echo "$GCLOUD_AUTH" | base64 --decode > .user/.config/gcloud/application_default_credentials.json
