@@ -56,7 +56,7 @@ jobs:
     - name: Select apps workspace
       env:
         TF_IN_AUTOMATION: true
-      if: startsWith(github.ref, 'refs/tags/apps-deploy-')
+      if: startsWith(github.ref, 'refs/tags/apps-deploy-') || startsWith(github.ref, 'refs/tags/destroy-')
       run: docker run --rm -t -v `pwd`:/infra -u `id -u`:`id -g` kbst-infra-automation:bootstrap terraform workspace select apps
 
     #
@@ -67,143 +67,46 @@ jobs:
         TF_IN_AUTOMATION: true
       run: docker run --rm -t -v `pwd`:/infra -u `id -u`:`id -g` kbst-infra-automation:bootstrap terraform plan -out=tfplan -input=false
 
-    # #
-    # #
-    # # Terraform apply
-    # - name: Terraform apply
-    #   env:
-    #     TF_IN_AUTOMATION: true
-    #   if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/apps-deploy-')
-    #   run: docker run --rm -v `pwd`:/infra -u `id -u`:`id -g` kbst-infra-automation:bootstrap terraform apply -input=false tfplan
+    #
+    #
+    # Terraform apply
+    - name: Terraform apply
+      env:
+        TF_IN_AUTOMATION: true
+      if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/apps-deploy-')
+      run: docker run --rm -v `pwd`:/infra -u `id -u`:`id -g` kbst-infra-automation:bootstrap terraform apply -input=false tfplan
 
+    #
+    #
+    # Terraform destroy apps cluster
+    - name: Terraform destroy apps cluster
+      env:
+        TF_IN_AUTOMATION: true
+      if: startsWith(github.ref, 'refs/tags/destroy-')
+      run: docker run --rm -v `pwd`:/infra -u `id -u`:`id -g` kbst-infra-automation:bootstrap terraform destroy -auto-approve
 
-
-# on: 
-#   pull_request:
-#     branches:
-#       - master
-
-# # Environment variables available to all jobs and steps in this workflow
-# env:
-#   PROJECT_ID: ${{ secrets.KBST_PROJECT }}
-#   RUN_REGION: europe-west4
-#   TERRAFORM_VERSION: 0.12.19
-#   TERRAFORM_PROVIDER_KUSTOMIZE_VERSION: v0.1.0-beta.0
-#   GOOGLE_CLOUD_SDK_VERSION: 272.0.0
-
-# jobs:
-#   deploy:
-#     runs-on: ubuntu-latest
-
-#     steps:
-#     - name: Checkout
-#       uses: actions/checkout@v2
-
-#     - name: Install Terraform-Provider-Kustomize
-#       run: |
-#         echo "The Github Workspace env var:"
-#         echo $GITHUB_WORKSPACE
-#         mkdir -p $GITHUB_WORKSPACE/terraform.d/plugins/linux_amd64
-#         curl -L https://github.com/kbst/terraform-provider-kustomize/releases/download/v0.1.0-beta.0/terraform-provider-kustomization-v0.1.0-beta.0-linux-amd64 -o "$GITHUB_WORKSPACE/terraform.d/plugins/linux_amd64/terraform-provider-kustomization"
-#         chmod +x $GITHUB_WORKSPACE/terraform.d/plugins/linux_amd64/terraform-provider-kustomization
-
-#     - name: 'Install Terraform'
-#       run: |
-#         mkdir -p ${HOME}/bin
-#         export PATH="${HOME}/bin:${PATH}"
-#         curl -L -o /tmp/terraform.zip https://releases.hashicorp.com/terraform/0.12.20/terraform_0.12.20_linux_amd64.zip
-#         unzip -o -d ${HOME}/bin /tmp/terraform.zip
-
-#     # GCP steps
-#     - name: Authenticate to GCP
-#       uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
-#       with:
-#         version: ${{ env.GOOGLE_CLOUD_SDK_VERSION }}
-#         service_account_email: ${{ secrets.SA_EMAIL }}
-#         service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}
-
-#     - name: Create key.json so Terraform can authenticate to GCP
-#       run: gcloud iam service-accounts keys create gcp-sa-key.json --iam-account ${{ secrets.SA_EMAIL }}
-
-#     - run: cat gcp-sa-key.json
-
-#     # Terraform steps
-#     - name: Initialize Terraform
-#       run: terraform init -input=false
-#       env:
-#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-
-#     - name: Create Ops workspace
-#       run: terraform workspace select ops
-#       env:
-#         GOOGLE_APPLICATION_CREDENTIALS: gcp-sa-key.json
-
-#     - name: Create a Terraform plan
-#       run: terraform plan -out=tfplan -input=false
-#       env:
-#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#         # GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-#         GOOGLE_APPLICATION_CREDENTIALS: gcp-sa-key.json
-
-#     - name: Show plan
-#       run: cat tfplan
+    #
+    #
+    # Select ops workspace
+    - name: Select ops workspace
+      env:
+        TF_IN_AUTOMATION: true
+      if: startsWith(github.ref, 'refs/tags/destroy-') == false
+      run: docker run --rm -t -v `pwd`:/infra -u `id -u`:`id -g` kbst-infra-automation:bootstrap terraform workspace select ops
     
-#     # - name: 'Terraform Init'
-#     #   uses: hashicorp/terraform-github-actions@master
-#     #   with:
-#     #     tf_actions_version: ${{ env.TERRAFORM_VERSION }}
-#     #     tf_actions_subcommand: 'init'
-#     #     tf_actions_working_dir: '.'
-#     #     tf_actions_comment: true
-#     #   env:
-#     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#     #     GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }} 
+    #
+    #
+    # Terraform destroy ops cluster
+    - name: Terraform destroy ops cluster
+      env:
+        TF_IN_AUTOMATION: true
+      if: startsWith(github.ref, 'refs/tags/destroy-')
+      run: docker run --rm -v `pwd`:/infra -u `id -u`:`id -g` kbst-infra-automation:bootstrap terraform destroy -auto-approve
 
-#     # - name: Check plugin
-#     #   run: |
-#     #     pwd 
-#     #     ls terraform.d/plugins/linux_amd64
-
-#     # - name: Install Terraform-Provider-Kustomize
-#     #   run: |
-#     #     mkdir -p $GITHUB_WORKSPACE/terraform.d/plugins/linux_amd64
-#     #     curl -L https://github.com/kbst/terraform-provider-kustomize/releases/download/v0.1.0-beta.0/terraform-provider-kustomization-v0.1.0-beta.0-linux-amd64 -o "$GITHUB_WORKSPACE/terraform.d/plugins/linux_amd64/terraform-provider-kustomization"
-#     #     chmod +x $GITHUB_WORKSPACE/terraform.d/plugins/linux_amd64/terraform-provider-kustomization
-
-#     # - name: Check plugin
-#     #   run: |
-#     #     pwd 
-#     #     ls terraform.d/plugins/linux_amd64
-    
-#     # - name: 'Terraform Validate'
-#     #   uses: hashicorp/terraform-github-actions@master
-#     #   with:
-#     #     tf_actions_version: ${{ env.TERRAFORM_VERSION }}
-#     #     tf_actions_subcommand: 'validate'
-#     #     tf_actions_working_dir: '.'
-#     #     tf_actions_comment: true
-#     #   env:
-#     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#     #     GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-    
-#     # - name: 'Terraform Plan'
-#     #   id: 'terraform_plan'
-#     #   uses: hashicorp/terraform-github-actions@master
-#     #   with:
-#     #     tf_actions_version: ${{ env.TERRAFORM_VERSION }}
-#     #     tf_actions_subcommand: 'plan -out=tfplan -input=false'
-#     #     tf_actions_working_dir: '.'
-#     #     tf_actions_comment: true
-#     #   env:
-#     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#     #     GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-    
-# #     - name: 'Terraform Apply'
-# #       uses: hashicorp/terraform-github-actions@master
-# #       with:
-# #         tf_actions_version: $TERRAFORM_VERSION
-# #         tf_actions_subcommand: 'apply'
-# #       env:
-# #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-# #         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+    #
+    #
+    # Terraform state list
+    - name: List all resources in the state
+      env:
+        TF_IN_AUTOMATION: true
+      run: docker run --rm -v `pwd`:/infra -u `id -u`:`id -g` kbst-infra-automation:bootstrap terraform state list
