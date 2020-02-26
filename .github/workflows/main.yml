@@ -74,7 +74,7 @@ jobs:
       env:
         TF_IN_AUTOMATION: true
       if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/apps-deploy-')
-      run: docker run --rm -v `pwd`:/infra -u `id -u`:`id -g` kbst-infra-automation:bootstrap terraform apply -input=false tfplan
+      run: docker run --rm -t -v `pwd`:/infra -u `id -u`:`id -g` kbst-infra-automation:bootstrap terraform apply -input=false tfplan
 
     #
     #
@@ -83,7 +83,7 @@ jobs:
       env:
         TF_IN_AUTOMATION: true
       if: startsWith(github.ref, 'refs/tags/destroy-')
-      run: docker run --rm -v `pwd`:/infra -u `id -u`:`id -g` kbst-infra-automation:bootstrap terraform destroy -auto-approve
+      run: docker run --rm -t -v `pwd`:/infra -u `id -u`:`id -g` kbst-infra-automation:bootstrap terraform destroy -auto-approve
 
     #
     #
@@ -91,7 +91,7 @@ jobs:
     - name: Select ops workspace
       env:
         TF_IN_AUTOMATION: true
-      if: startsWith(github.ref, 'refs/tags/destroy-') == false
+      if: startsWith(github.ref, 'refs/tags/destroy-')
       run: docker run --rm -t -v `pwd`:/infra -u `id -u`:`id -g` kbst-infra-automation:bootstrap terraform workspace select ops
     
     #
@@ -101,7 +101,7 @@ jobs:
       env:
         TF_IN_AUTOMATION: true
       if: startsWith(github.ref, 'refs/tags/destroy-')
-      run: docker run --rm -v `pwd`:/infra -u `id -u`:`id -g` kbst-infra-automation:bootstrap terraform destroy -auto-approve
+      run: docker run --rm -t -v `pwd`:/infra -u `id -u`:`id -g` kbst-infra-automation:bootstrap terraform destroy -auto-approve
 
     #
     #
@@ -109,4 +109,4 @@ jobs:
     - name: List all resources in the state
       env:
         TF_IN_AUTOMATION: true
-      run: docker run --rm -v `pwd`:/infra -u `id -u`:`id -g` kbst-infra-automation:bootstrap terraform state list
+      run: docker run --rm -t -v `pwd`:/infra -u `id -u`:`id -g` kbst-infra-automation:bootstrap terraform state list
