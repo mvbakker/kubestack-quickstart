@@ -1,4 +1,4 @@
-namespace: gitops-observability-demo
+namespace: gitops-obs-prod
 
 resources:
 - namespace.yaml
