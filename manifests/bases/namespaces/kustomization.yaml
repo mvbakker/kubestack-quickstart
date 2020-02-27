@@ -1,2 +1,3 @@
 bases:
-- gitops-observability-demo
+- gitops-observability-demo-dev
+- gitops-observability-demo-prod

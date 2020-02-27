@@ -5,3 +5,4 @@ resources:
 - ../../bases/nginx/default-ingress
 - ../../bases/prometheus/clusterwide
 - ../../bases/namespaces
+s

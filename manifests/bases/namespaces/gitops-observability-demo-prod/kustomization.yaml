@@ -1,0 +1,5 @@
+namespace: gitops-observability-demo-prod
+
+resources:
+- namespace.yaml
+- rolebinding.yaml
