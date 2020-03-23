@@ -18,7 +18,7 @@ clusters = {
       base_domain = "infra.example.com"
 
       # Initial desired K8s version, will be upgraded automatically
-      cluster_min_master_version = "1.13.12"
+      cluster_min_master_version = "1.15.8"
 
       # Initial number of desired nodes per zone
       cluster_initial_node_count = 1
